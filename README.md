@@ -50,13 +50,13 @@ Then run the executable:
 cd python
 ```
 ```shell
-$ python -m venv /path/to/env`
+$ python -m venv /path/to/env
 
 Linux/mac
-$ source /path/to/env/bin/activate`
+$ source /path/to/env/bin/activate
 
 Windows
-$ \path\to\env\Script\activate`
+$ \path\to\env\Script\activate
 
 $ pip install -r requirements.txt
 ```
