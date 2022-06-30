@@ -8,11 +8,11 @@ This repository folder contains the Dockerfile to build a docker image with the 
     docker build . -t openvino_container:2022.1.0
     ```
 2) This command creates a docker container with OpenVINO™ 2022.1.0 release.
-    ##### windows
+    ##### Windows
     ```
     docker run -it --rm -v %cd%\..:/yolov5-openvino openvino_container:2022.1.0
     ```
-    ##### linux
+    ##### Linux/Mac
     ```
     docker run -it --rm -v $(pwd)/..:/yolov5-openvino openvino_container:2022.1.0
     ```
