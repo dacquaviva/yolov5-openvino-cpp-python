@@ -20,7 +20,7 @@ This repository folder contains the Dockerfile to build a docker image with the 
 
 From within the docker run:
 ```
-mkdir build && cd build
+cd cpp && mkdir build && cd build
 ```
 Then create the make file using cmake:
 ```
