@@ -1,8 +1,8 @@
-## YOLOV5-Openvino-Cpp-Python
+## YOLOv5-Openvino-Cpp-Python
 
-Example of performing inference with ultralytics [YOLOV5](https://github.com/ultralytics/yolov5) using the 2022.1.0 openvino API in C++ using Docker as well as python.
+Example of performing inference with ultralytics [YOLOv5](https://github.com/ultralytics/yolov5) using the 2022.1.0 openvino API in C++ using Docker as well as python.
 
-This repository is only for model inference using openvino. Therefore, it assumes the yolov5 model is already trained and exported to openvino (.bin, .xml) format. For further info check [YOLOV5](https://github.com/ultralytics/yolov5).
+This repository is only for model inference using openvino. Therefore, it assumes the yolov5 model is already trained and exported to openvino (.bin, .xml) format. For further info check [YOLOv5](https://github.com/ultralytics/yolov5).
 
 ## YOLO5-Openvino-Cpp
 ```
@@ -43,7 +43,7 @@ Then run the executable:
 ./main
 ```
 
-## YOLOV5-Openvino-Python
+## YOLOv5-Openvino-Python
 
 ### Usage
 ```
