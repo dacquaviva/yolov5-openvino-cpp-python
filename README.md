@@ -64,6 +64,6 @@ Then run the script:
 python main.py
 ```
 
-## Fianl Result:
+## Final Result:
 
 ![IMAGE_DESCRIPTION](./imgs/result.png)
