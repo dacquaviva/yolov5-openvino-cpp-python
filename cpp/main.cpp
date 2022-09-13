@@ -19,21 +19,29 @@ struct Detection
 };
 
 
-cv::Mat resize_and_pad(cv::Mat &img, cv::Size new_shape){
+struct Resize
+{
+    cv::Mat resized_image;
+    int dw;
+    int dh;
+};
+
+
+Resize resize_and_pad(cv::Mat& img, cv::Size new_shape) {
     float width = img.cols;
     float height = img.rows;
     float r = float(new_shape.width / max(width, height));
     int new_unpadW = int(round(width * r));
     int new_unpadH = int(round(height * r));
-    cv::Mat dst;
-    cv::resize(img, dst, cv::Size(new_unpadW, new_unpadH), 0, 0, cv::INTER_AREA);
+    Resize resize;
+    cv::resize(img, resize.resized_image, cv::Size(new_unpadW, new_unpadH), 0, 0, cv::INTER_AREA);
 
-    int dw = new_shape.width - new_unpadW;
-    int dh = new_shape.height - new_unpadH;
+    resize.dw = new_shape.width - new_unpadW;
+    resize.dh = new_shape.height - new_unpadH; 
     cv::Scalar color = cv::Scalar(100, 100, 100);
-    cv::copyMakeBorder(dst, dst, 0, dh, 0, dw, cv::BORDER_CONSTANT, color);
+    cv::copyMakeBorder(resize.resized_image, resize.resized_image, 0, resize.dh, 0, resize.dw, cv::BORDER_CONSTANT, color);
 
-    return dst;
+    return resize;
 }
 
 
@@ -48,7 +56,7 @@ int main(){
     // Step 3. Read input image
     cv::Mat img = cv::imread("../../imgs/000000000312.jpg");
     // resize image
-    cv::Mat img_reized = resize_and_pad(img, cv::Size(640, 640));
+    Resize res = resize_and_pad(img, cv::Size(640, 640));
 
 
     // Step 4. Inizialize Preprocessing for the model
@@ -67,7 +75,7 @@ int main(){
 
 
     // Step 5. Create tensor from image
-    float *input_data = (float *) img_reized.data;
+    float *input_data = (float *) res.resized_image.data;
     ov::Tensor input_tensor = ov::Tensor(compiled_model.input().get_element_type(), compiled_model.input().get_shape(), input_data);
 
 
@@ -138,6 +146,12 @@ int main(){
         auto box = detection.box;
         auto classId = detection.class_id;
         auto confidence = detection.confidence;
+        float rx = (float)img.cols / (float)(res.resized_image.cols - res.dw);
+        float ry = (float)img.rows / (float)(res.resized_image.rows - res.dh);
+        box.x = rx * box.x;
+        box.y = ry * box.y;
+        box.width = rx * box.width;
+        box.height = ry * box.height;
         cout << "Bbox" << i + 1 << ": Class: " << classId << " "
              << "Confidence: " << confidence << " Scaled coords: [ "
              << "cx: " << (float)(box.x + (box.width / 2)) / img.cols << ", "
