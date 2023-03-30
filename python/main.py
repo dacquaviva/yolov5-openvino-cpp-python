@@ -27,7 +27,7 @@ def resize_and_pad(image, new_shape):
     color = [100, 100, 100]
     new_im = cv2.copyMakeBorder(image, 0, delta_h, 0, delta_w, cv2.BORDER_CONSTANT, value=color)
     
-    return new_im
+    return new_im, delta_w, delta_h
 
 
 def main( ):
@@ -41,7 +41,7 @@ def main( ):
     # Step 3. Read input image
     img = cv2.imread(str(Path("../imgs/000000000312.jpg")))
     # resize image
-    img_reized = resize_and_pad(img, (640, 640))
+    img_resized, dw, dh = resize_and_pad(img, (640, 640))
 
 
     # Step 4. Inizialize Preprocessing for the model
@@ -60,7 +60,7 @@ def main( ):
 
 
     # Step 5. Create tensor from image
-    input_tensor = np.expand_dims(img_reized, 0)
+    input_tensor = np.expand_dims(img_resized, 0)
 
 
     # Step 6. Create an infer request for model inference 
@@ -106,6 +106,14 @@ def main( ):
         box = detection["box"]
         classId = detection["class_index"]
         confidence = detection["confidence"]
+
+        rx = img.shape[1] / (img_resized.shape[1] - dw)
+        ry = img.shape[0] / (img_resized.shape[0] - dh)
+        box[0] = rx * box[0]
+        box[1] = ry * box[1]
+        box[2] = rx * box[2]
+        box[3] = ry * box[3]
+
         print( f"Bbox {i} Class: {classId} Confidence: {confidence} Scaled coords: [ cx: {(box[0] + (box[2] / 2)) / img.shape[1]}, cy: {(box[1] + (box[3] / 2)) / img.shape[0]}, w: {box[2]/ img.shape[1]}, h: {box[3] / img.shape[0]} ]" )
         xmax = box[0] + box[2]
         ymax = box[1] + box[3]
